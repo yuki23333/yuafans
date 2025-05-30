@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审核管理 - 提问悠</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-top: 80px; /* 为顶部导航栏留出空间 */
+            padding-bottom: 40px; /* 为底部栏留出空间 */
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-title {
+            color: #385c78;
+            margin: 0;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .question-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(56, 92, 120, 0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .question-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .question-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .approve-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .approve-btn:hover {
+            background: #218838;
+        }
+        
+        .archive-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .archive-btn:hover {
+            background: #5a6268;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .status-approved {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-archived {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-container">
+                <div class="logo-image">
+                    <img src="./images/logo.png" alt="提问悠 Logo">
+                </div>
+                <div class="logo-text">提问悠</div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">审核管理</h1>
+            <button class="logout-btn" onclick="handleLogout()">退出登录</button>
+        </div>
+
+        <div id="questionsList">
+            <!-- 示例卡片 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 14:30</span>
+                    <span class="status-badge status-pending">待审核</span>
+                </div>
+                <div class="question-content">
+                    悠亚悠亚，你最喜欢吃什么呀？
+                </div>
+                <div class="question-actions">
+                    <button class="action-btn approve-btn" onclick="handleApprove(this)">通过</button>
+                    <button class="action-btn archive-btn" onclick="handleArchive(this)">归档</button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 13:15</span>
+                    <span class="status-badge status-approved">已通过</span>
+                </div>
+                <div class="question-content">
+                    今天天气真好，悠亚要不要一起出去玩？
+                </div>
+                <img src="https://picsum.photos/800/400" class="question-image">
+                <div class="question-actions">
+                    <button class="action-btn archive-btn" onclick="handleArchive(this)">归档</button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 12:00</span>
+                    <span class="status-badge status-archived">已归档</span>
+                </div>
+                <div class="question-content">
+                    悠亚最近在玩什么游戏呢？可以推荐一下吗？
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 HoshinaYuki_</p>
+        </div>
+    </footer>
+
+    <script>
+        // 检查登录状态
+        function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/admin-login.html';
+            }
+        }
+        
+        // 页面加载时检查登录状态
+        checkAuth();
+        
+        // 退出登录
+        function handleLogout() {
+            localStorage.removeItem('adminToken');
+            window.location.href = '/admin-login.html';
+        }
+        
+        // 处理通过
+        async function handleApprove(btn) {
+            const card = btn.closest('.question-card');
+            const questionId = card.dataset.id;
+            
+            try {
+                const response = await fetch(`/api/admin/questions/${questionId}/approve`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const statusBadge = card.querySelector('.status-badge');
+                    statusBadge.className = 'status-badge status-approved';
+                    statusBadge.textContent = '已通过';
+                    btn.remove();
+                }
+            } catch (error) {
+                console.error('操作失败:', error);
+                alert('操作失败，请重试');
+            }
+        }
+        
+        // 处理归档
+        async function handleArchive(btn) {
+            const card = btn.closest('.question-card');
+            const questionId = card.dataset.id;
+            
+            try {
+                const response = await fetch(`/api/admin/questions/${questionId}/archive`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const statusBadge = card.querySelector('.status-badge');
+                    statusBadge.className = 'status-badge status-archived';
+                    statusBadge.textContent = '已归档';
+                    const actions = card.querySelector('.question-actions');
+                    actions.remove();
+                }
+            } catch (error) {
+                console.error('操作失败:', error);
+                alert('操作失败，请重试');
+            }
+        }
+        
+        // 加载问题列表
+        async function loadQuestions() {
+            try {
+                const response = await fetch('/api/admin/questions', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const questions = await response.json();
+                    const questionsList = document.getElementById('questionsList');
+                    questionsList.innerHTML = questions.map(question => `
+                        <div class="question-card" data-id="${question.id}">
+                            <div class="question-header">
+                                <span>${new Date(question.createdAt).toLocaleString()}</span>
+                                <span class="status-badge status-${question.status}">${getStatusText(question.status)}</span>
+                            </div>
+                            <div class="question-content">${question.content}</div>
+                            ${question.image ? `<img src="${question.image}" class="question-image">` : ''}
+                            ${question.status === 'pending' ? `
+                                <div class="question-actions">
+                                    <button class="action-btn approve-btn" onclick="handleApprove(this)">通过</button>
+                                    <button class="action-btn archive-btn" onclick="handleArchive(this)">归档</button>
+                                </div>
+                            ` : question.status === 'approved' ? `
+                                <div class="question-actions">
+                                    <button class="action-btn archive-btn" onclick="handleArchive(this)">归档</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('加载失败:', error);
+                alert('加载失败，请刷新页面重试');
+            }
+        }
+        
+        // 获取状态文本
+        function getStatusText(status) {
+            const statusMap = {
+                pending: '待审核',
+                approved: '已通过',
+                archived: '已归档'
+            };
+            return statusMap[status] || status;
+        }
+        
+        // 页面加载时加载问题列表
+        loadQuestions();
+    </script>
+</body>
+</html> 

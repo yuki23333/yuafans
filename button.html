@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮悠</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: url('./images/bg/背景.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 120px; /* 为footer留出空间 */
+            overflow-y: auto; /* 允许页面滚动 */
+        }
+        .button-page-header { display: none; }
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-left: 0.5rem;
+            letter-spacing: 2px;
+        }
+        .back-home-btn {
+            position: fixed;
+            right: 40px;
+            top: 18px;
+            left: auto;
+            transform: none;
+            background: #c0e0f0;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            border-radius: 24px;
+            padding: 0.5rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+            transition: background 0.2s, border 0.2s;
+            z-index: 1001;
+        }
+        .back-home-btn:hover {
+            background: #b0d0e0;
+        }
+        .button-hero {
+            margin: 120px auto 32px auto;
+            max-width: 340px;
+            background: rgba(192,224,240,0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(192,224,240,0.3);
+            border: 1px solid rgba(192,224,240,0.4);
+            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .button-hero:hover {
+            background: rgba(192,224,240,0.1);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            border: 1px solid rgba(192,224,240,0.2);
+            box-shadow: 0 8px 32px 0 rgba(192,224,240,0.2);
+        }
+        .button-hero h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .button-hero p {
+            color: #385c78;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .button-section-list {
+            max-width: 1600px;
+            margin: 0 auto 48px auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            padding: 0 20px;
+        }
+        .button-section {
+            background: #c0e0f0;
+            border-radius: 18px;
+            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+            min-width: 220px;
+            max-width: 240px;
+            flex: 1 1 0;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .button-section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+            text-align: center;
+            width: 100%;
+        }
+        .button-section-divider {
+            width: 100%;
+            height: 1px;
+            background: #b0d0e0;
+            margin-bottom: 0.7rem;
+        }
+        .button-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        .button-list-btn {
+            background: #fff;
+            color: #385c78;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(44,62,80,0.06);
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 36px; /* 固定按钮高度 */
+            line-height: 1.2; /* 文字垂直居中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .button-list-btn:hover {
+            background: #e0f4ff;
+            color: #2c3e50;
+        }
+        .button-list-btn.playing {
+            background: #e0f4ff;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        @media (max-width: 1600px) {
+            .button-section-list {
+                max-width: 100vw;
+                gap: 1.2rem;
+            }
+        }
+        @media (max-width: 1200px) {
+            .button-section-list {
+                flex-wrap: wrap;
+                gap: 1.5rem;
+            }
+        }
+        @media (max-width: 900px) {
+            .button-section-list {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            .button-section {
+                max-width: 100%;
+                min-width: 0;
+                width: 100%;
+            }
+        }
+        .header {
+            background-color: rgba(192, 224, 240, 0.9);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 80px;
+            left: 0;
+        }
+        .nav-container {
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1.5rem;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .logo-image:hover {
+            transform: scale(1.2);
+        }
+        .logo-image.rotate {
+            animation: rotate360 1s linear;
+            transform: scale(1.2);
+        }
+        @keyframes rotate360 {
+            from { transform: scale(1.2) rotate(0deg); }
+            to { transform: scale(1.2) rotate(360deg); }
+        }
+        .logo-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .footer {
+            background-color: rgba(192, 224, 240, 0.8);
+            padding: 1rem 0 0.5rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        .footer-bottom {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(44, 62, 80, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-container">
+                <div class="logo-image" id="logoBtn">
+                    <img src="./images/logo.png" alt="悠亚Yua Logo">
+                </div>
+                <div class="logo-title">按钮悠</div>
+            </div>
+            <button class="back-home-btn" onclick="window.location.href='index.html'">回到主页</button>
+        </nav>
+    </header>
+    <div class="button-hero">
+        <h1>按钮悠</h1>
+        <p>听听枸杞鹅的小动静</p>
+    </div>
+    <div class="button-section-list">
+        <div class="button-section">
+            <div class="button-section-title">日常</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/日常/波比波比波.mp3">波比波比波</button>
+                <button class="button-list-btn" data-audio="./sound/日常/咕咕嘎嘎.mp3">咕咕嘎嘎</button>
+                <button class="button-list-btn" data-audio="./sound/日常/开挂.mp3">开挂</button>
+                <button class="button-list-btn" data-audio="./sound/日常/希腊奶.mp3">希腊奶</button>
+                <button class="button-list-btn" data-audio="./sound/日常/太下流了.mp3">太下流了</button>
+                <button class="button-list-btn" data-audio="./sound/日常/鼻炎音.mp3">鼻炎音</button>
+                <button class="button-list-btn" data-audio="./sound/日常/妈呀.mp3">妈呀</button>
+                <button class="button-list-btn" data-audio="./sound/日常/好崩溃.mp3">好崩溃</button>
+                <button class="button-list-btn" data-audio="./sound/日常/骂谁VR信.mp3">骂谁VR信</button>
+                <button class="button-list-btn" data-audio="./sound/日常/快转钱.mp3">快转钱</button>
+                <button class="button-list-btn" data-audio="./sound/日常/哈哈哈1.mp3">哈哈哈</button>
+                <button class="button-list-btn" data-audio="./sound/日常/都是奶p.mp3">都是奶p</button>
+                <button class="button-list-btn" data-audio="./sound/日常/小男娘闹麻了.mp3">小男娘闹麻了</button>
+                <button class="button-list-btn" data-audio="./sound/日常/灵感菇.mp3">灵感菇</button>
+                <button class="button-list-btn" data-audio="./sound/日常/我要进去啦.mp3">我要进去啦</button>
+                <button class="button-list-btn" data-audio="./sound/日常/玩屎.mp3">玩屎</button>
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button-section-title">老百京悠</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/老百京悠/AUV.mp3">AUV</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/那叫一个地道.mp3">那叫一个地道</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/北京的爷就是爷.mp3">北京的爷就是爷</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/嘛呢介是.mp3">嘛呢介是</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/溜着边喝.mp3">溜着边喝</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/臭外地的.mp3">臭外地的</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/狗奴才.mp3">狗奴才</button>
+                <button class="button-list-btn" data-audio="./sound/老百京悠/叫阿玛.mp3">叫阿玛</button>
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button-section-title">温水煮企鹅</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/硅胶1.mp3">硅胶1</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/硅胶2.mp3">硅胶2</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/哎呀喷了.mp3">哎呀喷了</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/杂鱼.mp3">杂鱼</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/一块肉蚌.mp3">一块肉蚌</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/出来了.mp3">出来了</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/动一动啊.mp3">动一动啊</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/123.mp3">123</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/慢一点.mp3">慢一点</button>
+                <button class="button-list-btn" data-audio="./sound/温水煮企鹅/进来了.mp3">进来了</button>
+                <button class="button-list-btn" data-audio="./sound/Gachi/球学长.mp3">球学长</button>
+                <button class="button-list-btn" data-audio="./sound/Gachi/十连mua.mp3">十连mua</button>
+                <button class="button-list-btn" data-audio="./sound/Gachi/MUA三连.mp3">MUA三连</button>
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button-section-title">树枝枸杞鹅</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/wdnm.mp3">wdnm</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/牛逼.mp3">牛逼</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/俺嫩爹.mp3">俺嫩爹</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/我是你爹.mp3">我是你爹</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/扑街 雷楼某.mp3">扑街 雷楼某</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/wqnmd.mp3">wqnmd</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/bitch.mp3">bitch</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/素质三连.mp3">素质三连</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/wrn.mp3">wrn</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/qnmd.mp3">qnmd</button>
+                <button class="button-list-btn" data-audio="./sound/树枝枸杞鹅/跪下.mp3">跪下</button>
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button-section-title">猪吧你</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你1.mp3">猪吧你1</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你2.mp3">猪吧你2</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你3.mp3">猪吧你3</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你4.mp3">猪吧你4</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你5.mp3">猪吧你5</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你6.mp3">猪吧你6</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你7.mp3">猪吧你7</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你8.mp3">猪吧你8</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你9.mp3">猪吧你9</button>
+                <button class="button-list-btn" data-audio="./sound/猪吧你/猪吧你10.mp3">猪吧你10</button>
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button-section-title">企鹅大炮</div>
+            <div class="button-section-divider"></div>
+            <div class="button-list">
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮00.mp3">大炮00</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮01.mp3">大炮01</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮02.mp3">大炮02</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮03.mp3">大炮03</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮04.mp3">大炮04</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮05.mp3">大炮05</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮06.mp3">大炮06</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮07.mp3">大炮07</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮08.mp3">大炮08</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮09.mp3">大炮09</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮10.mp3">大炮10</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮11.mp3">大炮11</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮12.mp3">大炮12</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮13.mp3">大炮13</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮14.mp3">大炮14</button>
+                <button class="button-list-btn" data-audio="./sound/企鹅大炮/大炮15.mp3">大炮15</button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 HoshinaYuki_</p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('logoBtn').addEventListener('click', function() {
+            this.classList.add('rotate');
+            setTimeout(() => {
+                this.classList.remove('rotate');
+            }, 1000);
+        });
+        // 通用音频播放
+        (function(){
+            let currentAudio = null;
+            let currentBtn = null;
+            document.querySelectorAll('.button-list-btn[data-audio]').forEach(function(btn){
+                let audio = new Audio(btn.getAttribute('data-audio'));
+                btn.addEventListener('click', function(){
+                    if(currentAudio && currentAudio !== audio){
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                        if(currentBtn) currentBtn.classList.remove('playing');
+                    }
+                    if(audio.paused){
+                        audio.play();
+                        btn.classList.add('playing');
+                        currentAudio = audio;
+                        currentBtn = btn;
+                    }else{
+                        audio.pause();
+                        btn.classList.remove('playing');
+                    }
+                });
+                audio.addEventListener('ended', function(){
+                    btn.classList.remove('playing');
+                    currentAudio = null;
+                    currentBtn = null;
+                });
+            });
+        })();
+    </script>
+</body>
+</html> 

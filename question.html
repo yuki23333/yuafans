@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提问悠</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-top: 80px; /* 为顶部导航栏留出空间 */
+            padding-bottom: 40px; /* 为底部栏留出空间 */
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .question-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .post-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(56, 92, 120, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #385c78;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #385c78;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .submit-btn {
+            background: #385c78;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #2d4a61;
+        }
+        
+        .question-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(56, 92, 120, 0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .question-topic {
+            color: #385c78;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .question-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .question-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: #f5f5f5;
+        }
+        
+        .action-btn.active {
+            color: #385c78;
+            border-color: #385c78;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-container">
+                <div class="logo-image">
+                    <img src="./images/logo.png" alt="提问悠 Logo">
+                </div>
+                <div class="logo-text">提问悠</div>
+            </div>
+            <div class="social-links">
+                <a href="https://space.bilibili.com/666726799" class="social-icon bilibili-icon" target="_blank">
+                    <img src="./images/bilibili-icon.svg" alt="Bilibili">
+                </a>
+                <a href="https://weibo.com/u/7497425828" class="social-icon weibo-icon" target="_blank">
+                    <img src="./images/weibo-icon.svg" alt="微博">
+                </a>
+                <a href="https://x.com/yyyy2114" class="social-icon twitter-icon" target="_blank">
+                    <img src="./images/twitter-icon.svg" alt="Twitter">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="question-container">
+        <div class="post-form">
+            <div class="form-group">
+                <label for="topic">话题</label>
+                <input type="text" id="topic" class="form-control" value="#提问投稿" readonly>
+            </div>
+            <div class="form-group">
+                <label for="content">内容</label>
+                <textarea id="content" class="form-control" rows="4" placeholder="在这里输入你想说的话..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">上传图片（可选）</label>
+                <input type="file" id="image" class="form-control" accept="image/*">
+                <img id="imagePreview" class="image-preview">
+            </div>
+            <button class="submit-btn" onclick="submitQuestion()">发布</button>
+        </div>
+
+        <div id="questionsList">
+            <!-- 示例卡片 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 14:30</span>
+                    <span>#提问投稿</span>
+                </div>
+                <div class="question-content">
+                    悠亚悠亚，你最喜欢吃什么呀？
+                </div>
+                <div class="question-actions">
+                    <button class="action-btn" onclick="toggleLike(this)">
+                        <span>👍</span>
+                        <span>42</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleDislike(this)">
+                        <span>👎</span>
+                        <span>3</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 13:15</span>
+                    <span>#提问投稿</span>
+                </div>
+                <div class="question-content">
+                    今天天气真好，悠亚要不要一起出去玩？
+                </div>
+                <img src="https://picsum.photos/800/400" class="question-image">
+                <div class="question-actions">
+                    <button class="action-btn" onclick="toggleLike(this)">
+                        <span>👍</span>
+                        <span>28</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleDislike(this)">
+                        <span>👎</span>
+                        <span>1</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-header">
+                    <span>2024-03-20 12:00</span>
+                    <span>#提问投稿</span>
+                </div>
+                <div class="question-content">
+                    悠亚最近在玩什么游戏呢？可以推荐一下吗？
+                </div>
+                <div class="question-actions">
+                    <button class="action-btn" onclick="toggleLike(this)">
+                        <span>👍</span>
+                        <span>56</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleDislike(this)">
+                        <span>👎</span>
+                        <span>2</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 HoshinaYuki_</p>
+        </div>
+    </footer>
+
+    <script>
+        // 图片预览
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 点赞/踩功能
+        function toggleLike(btn) {
+            btn.classList.toggle('active');
+            const count = btn.querySelector('span:last-child');
+            count.textContent = parseInt(count.textContent) + (btn.classList.contains('active') ? 1 : -1);
+        }
+
+        function toggleDislike(btn) {
+            btn.classList.toggle('active');
+            const count = btn.querySelector('span:last-child');
+            count.textContent = parseInt(count.textContent) + (btn.classList.contains('active') ? 1 : -1);
+        }
+
+        // 提交问题
+        async function submitQuestion() {
+            const content = document.getElementById('content').value;
+            const image = document.getElementById('image').files[0];
+            
+            if (!content.trim()) {
+                alert('请输入内容');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('content', content);
+            if (image) {
+                formData.append('image', image);
+            }
+
+            try {
+                const response = await fetch('/api/questions', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('提交成功！等待审核');
+                    document.getElementById('content').value = '';
+                    document.getElementById('image').value = '';
+                    document.getElementById('imagePreview').style.display = 'none';
+                } else {
+                    alert('提交失败，请重试');
+                }
+            } catch (error) {
+                console.error('提交失败:', error);
+                alert('提交失败，请重试');
+            }
+        }
+    </script>
+</body>
+</html> 

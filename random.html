@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机悠</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: url('./images/bg/背景.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-left: 0.5rem;
+            letter-spacing: 2px;
+        }
+        .back-home-btn {
+            position: absolute;
+            right: 40px;
+            top: 18px;
+            left: auto;
+            transform: none;
+            background: #c0e0f0;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            border-radius: 24px;
+            padding: 0.5rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+            transition: background 0.2s, border 0.2s;
+            z-index: 1001;
+        }
+        .button-hero {
+            margin: 120px auto 32px auto;
+            max-width: 520px;
+            background: rgba(192,224,240,0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(192,224,240,0.3);
+            border: 1px solid rgba(192,224,240,0.4);
+            padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .button-hero:hover {
+            background: rgba(192,224,240,0.1);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            border: 1px solid rgba(192,224,240,0.2);
+            box-shadow: 0 8px 32px 0 rgba(192,224,240,0.2);
+        }
+        .button-hero h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .button-hero p {
+            color: #385c78;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .random-btn-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 32px;
+        }
+        .random-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #c0e0f0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+            cursor: pointer;
+            margin-bottom: 36px;
+            transition: background 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .random-btn:hover {
+            background: #b0d0e0;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+        }
+        .random-img-area {
+            width: 520px;
+            height: 520px;
+            background: rgba(192,224,240,0.25);
+            border-radius: 32px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px 0 rgba(192,224,240,0.2);
+            border: 1px solid rgba(192,224,240,0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+        }
+        .random-img-area img {
+            max-width: 90%;
+            max-height: 90%;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1.1);
+            transition: opacity 0.7s, transform 0.7s;
+        }
+        .random-img-area img.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .random-modal {
+            position: fixed;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        .random-modal.active {
+            display: flex;
+        }
+        .random-modal-content {
+            background: #fff;
+            border-radius: 18px;
+            padding: 2rem 2.5rem;
+            font-size: 1.3rem;
+            color: #2c3e50;
+            box-shadow: 0 8px 32px 0 rgba(44,62,80,0.13);
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .random-img-area {
+                width: 90vw;
+                height: 60vw;
+                min-width: 180px;
+                min-height: 180px;
+            }
+            .random-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 1rem;
+            }
+            .button-hero {
+                max-width: 95vw;
+                padding: 1.5rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-container">
+                <div class="logo-image" id="logoBtn">
+                    <img src="./images/logo.png" alt="悠亚Yua Logo">
+                </div>
+                <div class="logo-title">随机悠</div>
+            </div>
+            <button class="back-home-btn" onclick="window.location.href='index.html'">回到主页</button>
+        </nav>
+    </header>
+    <div class="button-hero">
+        <h1>随机悠</h1>
+        <p>随机企鹅试试手气</p>
+    </div>
+    <div class="random-btn-area">
+        <button class="random-btn" id="randomBtn">随机悠亚</button>
+        <div class="random-img-area" id="randomImgArea"></div>
+    </div>
+    <div class="random-modal" id="randomModal">
+        <div class="random-modal-content">今日手气已用完，明天再来看看吧！</div>
+    </div>
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 HoshinaYuki_</p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('logoBtn').addEventListener('click', function() {
+            this.classList.add('rotate');
+            setTimeout(() => {
+                this.classList.remove('rotate');
+            }, 1000);
+        });
+
+        // 随机图片逻辑
+        const imgList = [
+            './images/random/r1.png','./images/random/r2.png','./images/random/r3.png','./images/random/r4.png','./images/random/r5.png',
+            './images/random/r6.png','./images/random/r8.png','./images/random/r9.png','./images/random/r10.png','./images/random/r11.png',
+            './images/random/r12.png','./images/random/r13.png','./images/random/r14.png','./images/random/r15.png','./images/random/r16.png',
+            './images/random/r17.png','./images/random/r18.png','./images/random/r19.jpg','./images/random/r20.jpg'
+        ];
+        const randomBtn = document.getElementById('randomBtn');
+        const randomImgArea = document.getElementById('randomImgArea');
+        const randomModal = document.getElementById('randomModal');
+        let lastIndex = -1;
+
+        // 简单本地存储实现每日10次限制
+        function getTodayKey() {
+            const d = new Date();
+            return 'random_yua_' + d.getFullYear() + '_' + (d.getMonth()+1) + '_' + d.getDate();
+        }
+        function getCount() {
+            const key = getTodayKey();
+            return parseInt(localStorage.getItem(key) || '0', 10);
+        }
+        function incCount() {
+            const key = getTodayKey();
+            let c = getCount();
+            localStorage.setItem(key, c+1);
+        }
+        function showModal() {
+            randomModal.classList.add('active');
+        }
+        function hideModal() {
+            randomModal.classList.remove('active');
+        }
+        randomModal.addEventListener('click', hideModal);
+
+        function showRandomImg() {
+            if(getCount() >= 10) {
+                showModal();
+                return;
+            }
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * imgList.length);
+            } while(idx === lastIndex && imgList.length > 1);
+            lastIndex = idx;
+            randomImgArea.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = imgList[idx];
+            setTimeout(() => {
+                img.classList.add('active');
+            }, 30);
+            randomImgArea.appendChild(img);
+            incCount();
+        }
+        randomBtn.addEventListener('click', showRandomImg);
+    </script>
+</body>
+</html> 
